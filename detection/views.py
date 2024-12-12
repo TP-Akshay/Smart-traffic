@@ -48,12 +48,13 @@ def generate_frames():
 
         frame = cv2.resize(frame, (640, 360))
 
-        # Crop the bottom part of the frame (adjust the percentage as needed)
+        # Crop the bottom part of the frame
         height, width, _ = frame.shape
-        cropped_frame = frame[int(height * 0.5):, :]  # Keep the bottom 50% of the frame
+        # Keep the bottom 50% of the frame
+        cropped_frame = frame[int(height * 0.5):, :]  
 
         # Detect objects in the cropped frame
-        bbox, label, conf = cv.detect_common_objects(cropped_frame)  # CPU-based detection
+        bbox, label, conf = cv.detect_common_objects(cropped_frame) 
 
         # Adjust bounding boxes to match the original frame coordinates
         adjusted_bbox = [
@@ -63,10 +64,11 @@ def generate_frames():
         # Draw bounding boxes on the original frame
         output_image = draw_bbox(frame, adjusted_bbox, label, conf)
 
-        # Track centroids of current frame
+        # Tracking centroids of current frame
         current_centroids = []
         for i, detected_label in enumerate(label):
-            if detected_label in ["car", "truck", "bus", "motorcycle"]:  # Filter vehicle labels
+            # Filter vehicle labels
+            if detected_label in ["car", "truck", "bus", "motorcycle"]:  
                 detected_box = adjusted_bbox[i]
                 centroid = get_centroid(detected_box)
                 current_centroids.append((centroid, detected_label))
