@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vehicle Detection</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      function fetchVehicleCounts() {
+        $.ajax({
+          url: "{% url 'vehicle_counts' %}",
+          type: "GET",
+          success: function (data) {
+            var vehicleCounts = data.vehicle_counts;
+            var countsList = "";
+            if (Object.keys(vehicleCounts).length > 0) {
+              for (var vehicle in vehicleCounts) {
+                countsList +=
+                  "<li>" +
+                  vehicle +
+                  ": <span>" +
+                  vehicleCounts[vehicle] +
+                  "</span></li>";
+              }
+            } else {
+              countsList = "<li>No vehicles detected yet.</li>";
+            }
+            $("#vehicle-counts").html(countsList);
+          },
+        });
+      }
+
+      $(document).ready(function () {
+        fetchVehicleCounts(); // Initial fetch
+        setInterval(fetchVehicleCounts, 5000); // Fetch every 5 seconds
+      });
+    </script>
+  </head>
+  <body>
+    <h1 style="text-align: center">Vehicle Detection</h1>
+    <table style="width: 100%; height: 100%">
+      <tr>
+        <td style="width: 50%; vertical-align: top; padding: 10px">
+          <h2>Video Stream</h2>
+          <img
+            src="{% url 'video_feed' %}"
+            width="100%"
+            height="auto"
+            style="border: 2px solid #000"
+          />
+        </td>
+        <td style="width: 50%; vertical-align: top; padding: 10px">
+          <h2>Detected Vehicles and Their Counts</h2>
+          <ul id="vehicle-counts">
+            <li>No vehicles detected yet.</li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
