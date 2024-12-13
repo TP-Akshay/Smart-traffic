@@ -14,7 +14,7 @@ if not video.isOpened():
 vehicle_counts = defaultdict(int)
 frame_skip = 5
 frame_counter = 0
-movement_threshold = 50
+movement_threshold = 75
 tracked_vehicles = {}
 next_vehicle_id = 1
 

@@ -12,7 +12,9 @@
           type: "GET",
           success: function (data) {
             var vehicleCounts = data.vehicle_counts;
+            var totalCount = 0;
             var countsList = "";
+
             if (Object.keys(vehicleCounts).length > 0) {
               for (var vehicle in vehicleCounts) {
                 countsList +=
@@ -21,18 +23,29 @@
                   ": <span>" +
                   vehicleCounts[vehicle] +
                   "</span></li>";
+                totalCount += vehicleCounts[vehicle];
               }
             } else {
               countsList = "<li>No vehicles detected yet.</li>";
             }
+
             $("#vehicle-counts").html(countsList);
+
+            // Change background color if total count >= 50
+            if (totalCount >= 50) {
+              document.body.style.backgroundColor = "red";
+            } else {
+              document.body.style.backgroundColor = ""; // Reset to default
+            }
           },
         });
       }
 
       $(document).ready(function () {
-        fetchVehicleCounts(); // Initial fetch
-        setInterval(fetchVehicleCounts, 5000); // Fetch every 5 seconds
+        // Initial fetch
+        fetchVehicleCounts();
+        // Fetch every 1 second
+        setInterval(fetchVehicleCounts, 1000);
       });
     </script>
   </head>
